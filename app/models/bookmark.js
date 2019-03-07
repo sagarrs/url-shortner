@@ -1,28 +1,32 @@
 const mongoose = require("mongoose")
-
+const sh = require("shorthash");
 const Schema = mongoose.Schema
 
 const bookmarkSchema = new Schema({
-    title:{
-       type: String, 
-       required: true
-    },
-    originalUrl:{
+    title: {
         type: String,
-        required: true
     },
-    tags:{
+    originalUrl: {
+        type: String,
+    },
+    tags: {
         type: [String],
-        required: true
     },
-    hashedUrl:{
+    hashedUrl: {
         type: String,
-        required: true
     },
-    createdAt:{
-        type: String,
-        default: new Date()   
+    createdAt: {
+        type: Date,
+        default: Date.now
     }
+})
+
+bookmarkSchema.pre("save", function(next){
+    const bookmark = this
+
+    const hashed = sh.unique(bookmark.originalUrl)
+    bookmark.hashedUrl = hashed
+    next()
 })
 
 const Bookmark = mongoose.model('Bookmark', bookmarkSchema)
