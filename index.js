@@ -1,10 +1,16 @@
 const express = require("express")
 // mongoose imported using ES-6 concise prop
 const { mongoose } = require("./config/database")
+const {bookmarkRouter} = require("./app/controllers/bookmarksController")
 const port = 3000
 const app = express()
 
-const {bookmarkRouter} = "./app/controllers/bookmarksController"
+app.use(express.json())
+// app.get('/', function(req,res){
+//     res.send("<h1>WELCOME TO CONTACT MANAGER</h1>")
+// })
+
+app.use('/', bookmarkRouter)
 
 app.listen(port, function(){
     console.log(`listening on port ${port}`)
