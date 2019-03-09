@@ -6,6 +6,7 @@ const port = 3000
 const app = express()
 
 app.use(express.json())
+
 // app.get('/', function(req,res){
 //     res.send("<h1>WELCOME TO CONTACT MANAGER</h1>")
 // })
