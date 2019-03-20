@@ -1,5 +1,6 @@
 const mongoose = require("mongoose")
 const sh = require("shorthash");
+var useragent = require('express-useragent');
 const Schema = mongoose.Schema
 
 const bookmarkSchema = new Schema({
@@ -18,7 +19,26 @@ const bookmarkSchema = new Schema({
     createdAt: {
         type: Date,
         default: Date.now
-    }
+    },
+    clicks: [
+        {
+            clickedDate: {
+                type: Date, default: Date.now
+            },
+            userIp:{
+                type: String
+            },
+            browserName:{
+                type: String
+            },
+            osType:{
+                type: String
+            },
+            deviceType:{
+                type: String
+            }
+        }
+    ]
 })
 
 bookmarkSchema.pre("save", function(next){
@@ -30,16 +50,16 @@ bookmarkSchema.pre("save", function(next){
     next()
 })
 
-// static method to find by hash 
-bookmarkSchema.statics.findByHash = function(hash){
-    const bookmark = this
+// // static method to find by hash 
+// bookmarkSchema.statics.findByHash = function(hash){
+//     const bookmark = this
 
-    return Bookmark.findOne({
-        hashedUrl: hash
-    })
-}
+//     return Bookmark.findOne({
+//         hashedUrl: hash
+//     })
+// }
 
-// static method to find by hash 
+// static method to find by tag 
 bookmarkSchema.statics.findByTag = function(tag){
     const bookmark = this
 

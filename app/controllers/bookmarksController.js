@@ -2,6 +2,7 @@ const express = require("express")
 const router = express.Router()
 const url = require('url');
 const {Bookmark} = require("../models/bookmark")
+var useragent = require('express-useragent');
 
 // TO GET THE DATA
 router.get("/bookmarks", function(req, res){
@@ -101,19 +102,51 @@ router.delete("/bookmarks/:id", function(req, res){
 // O-T-H-E-R A-P-I E-N-D P-O-I-N-T-S 
 
 // This return the url by matching the hash
+
 router.get("/:hash", function(req, res){
     const hash = req.params.hash
-    console.log("getter")
-    // a static methood is defined in the model
-    Bookmark.findByHash(hash)
-        .then(function(bookmark){
+    const agent = req.useragent
+    const ip =req.ip
+    let device
+    if(agent.isMobile){
+        device= "mobile"
+    }else {
+        device= "desktop"
+    }
+    const update={
+        browserName: agent.browser,
+        osType: agent.os,
+        deviceType: device,
+        userIp: ip
+    }    
+    console.log(update)
+
+    Bookmark.findOneAndUpdate({'hashedUrl':hash}, {$push:{clicks:update}},{new: true, runValidators:true} )
+    .then(function(bookmark){
+        if(bookmark.length!=0){
             res.send(bookmark.originalUrl)
-        })
-        .catch(function(err){
-            console.log(err)
-            res.send(err)
-        })
+        }else{
+            console.log(`Can't find Hashed Url as hash value provided doesn't exist`)
+        }
+    })
+    .catch(function(err){
+        res.send(err)
+    })
 })
+
+
+// router.get("/:hash", function(req, res){
+//     const hash = req.params.hash
+//     // a static methood is defined in the model
+//     Bookmark.findByHash(hash)
+//         .then(function(bookmark){
+//             res.send(bookmark.originalUrl)
+//         })
+//         .catch(function(err){
+//             console.log(err)
+//             res.send(err)
+//         })   
+// })
 
 // Find n return all the bookmarks that meets the specific tag
 router.get("/bookmarks/tags/:name", function(req, res){
