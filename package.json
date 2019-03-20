@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.16.4",
+    "express-useragent": "^1.0.12",
     "mongoose": "^5.4.16",
     "shorthash": "0.0.2"
   }
