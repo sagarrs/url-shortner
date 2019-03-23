@@ -119,3 +119,4 @@ router.get('/bookmarks/tags/:name',function(req,res){
 })
 module.exports = {
     bookmarksRouter: router
+}
