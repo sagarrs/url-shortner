@@ -38,7 +38,10 @@ const bookmarkSchema = new Schema({
                 type: String
             }
         }
-    ]
+    ],
+    user: {
+        type: String
+    }
 })
 
 bookmarkSchema.pre("save", function(next){

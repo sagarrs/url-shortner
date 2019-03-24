@@ -6,6 +6,7 @@ var path = require('path')
 // mongoose imported using ES-6 concise prop
 const { mongoose } = require("./config/database")
 const {bookmarkRouter} = require("./app/controllers/bookmarksController")
+const {userRouter} = require("./app/controllers/usersController")
 const port = 3000
 const app = express()
 
@@ -18,6 +19,7 @@ app.use(useragent.express());
 app.use(morgan('combined'))
 
 app.use('/', bookmarkRouter)
+app.use('/users', userRouter)
 
 app.use(function (err, req, res, next) {
     console.error(err.stack)
