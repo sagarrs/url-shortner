@@ -103,7 +103,7 @@ router.delete("/bookmarks/:id", function(req, res){
 
 // This return the url by matching the hash
 
-router.get("/:hash", function(req, res){
+router.get("/:hash", function(req, res, next){
     const hash = req.params.hash
     const agent = req.useragent
     const ip =req.ip
@@ -127,10 +127,14 @@ router.get("/:hash", function(req, res){
             res.send(bookmark.originalUrl)
         }else{
             console.log(`Can't find Hashed Url as hash value provided doesn't exist`)
+            let error=new Error(`Can't find Hashed Url as hash value provided doesn't exist`)
+              
+            next(error)
         }
     })
     .catch(function(err){
-        res.send(err)
+        let error=new Error(`Can't find Hashed Url as hash value provided doesn't exist`)
+        next(error)
     })
 })
 
