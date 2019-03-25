@@ -27,7 +27,18 @@ const userSchema = new Schema({
         required: true,
         minlength: 5,
         maxlength: 128
-    }
+    },
+    tokens: [
+        {        
+            token: {
+                type: String
+            },
+            createdAt: {
+                type: Date,
+                default: Date.now()
+            }
+        }
+    ]
 })
 
 userSchema.pre("save", function(next){
